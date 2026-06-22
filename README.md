@@ -1,31 +1,56 @@
-# قالب وب‌سایت MOVTIGROUP
-[English](README.en.md) | [فارسی](README.md)
+# SSH-VPN Rust-Based High-Performance Core
 
-این مخزن شامل قالب اصلی وب‌سایت شرکت **MOVTIGROUP** است. هدف از ارائه این مخزن، نمایش و مستندسازی طراحی ظاهری و ساختار صفحات جهت ارائه‌ی هویت بصری شرکت می‌باشد. لازم به ذکر است که کدهای عملکردی و منطق پشت وب‌سایت به صورت خصوصی در مخزن مجزا نگهداری می‌شوند.
+An ultra-safe, blazingly fast network core rewritten in **Rust** to support asynchronous **SSH Tunneling**, **VPN encapsulation**, and **Split Tunneling** automation. This core is designed to be the foundation for modern VPN applications, providing 100% stability and zero-cost abstractions.
 
-**لینک گیت هاب:** [https://github.com/movtigroup/movtigroup/](https://github.com/movtigroup/movtigroup/)
+## 🚀 Architectural Advantages
+- **Hybrid SSH Backend**: Supports both `libssh2` (via C bindings) and `russh` (native Rust) for maximum compatibility and safety.
+- **Zero Garbage Collection**: Zero runtime pauses ensure consistent ping and throughput.
+- **Memory Safety Guarantee**: Compile-time memory verification prevents Buffer Overflows and Data Races.
+- **Native Async Stack**: Built using Tokio for massive connection scaling.
+- **Split Tunneling**: Built-in support for OS-level routing configuration (Linux, macOS, Windows).
+- **SlipNet Support**: Architecture designed to be compatible with DNS tunneling protocols like those found in [SlipNet](https://github.com/anonvector/SlipNet).
 
-## معرفی
+## 🛠️ Project Structure
+- `src/main.rs`: Entry point and service orchestration.
+- `src/ssh/`: SSH engines (LibSSH2 and Russh backends).
+- `src/routing.rs`: OS-specific routing table management.
+- `tests/`: Comprehensive integration and stability tests.
 
-این قالب به عنوان الگوی اصلی طراحی سایت شرکت MOVTIGROUP ارائه شده است. در اینجا تمرکز بر ایجاد یک تجربه کاربری مدرن، ساده و واکنش‌گرا قرار دارد. تمامی اجزا و ساختارهای بصری نمایانگر هویت برند، در‌باشند.
+## 📦 Compilation and Setup
 
-## ویژگی‌های قالب
+### Prerequisites
+- Install Rust toolchain: `curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh`
 
-- **طراحی ریسپانسیو:** سازگار با تمامی دستگاه‌ها از جمله موبایل، تبلت و دسکتاپ.
-- **سفارشی‌سازی آسان:** امکان تغییر و تطبیق المان‌های طراحی مطابق با هویت بصری شرکت.
-- **سادگی و مستندسازی:** ساختار تمیز و مستند برای مرور و استفاده سریع.
-- **سهولت نگهداری:** به‌روزرسانی‌های منظم و ساختار سازمان‌یافته جهت حفظ انسجام طراحی.
+### Setup
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/tahatehran/SSH-VPN.git
+   cd SSH-VPN
+   ```
 
-## نکات مهم
+2. Build the project in release mode:
+   ```bash
+   cargo build --release
+   ```
 
-- این مخزن صرفاً جهت نمایش قالب و اجزای ظاهری وب‌سایت می‌باشد.
-- کدهای مربوط به منطق عملکردی و مدیریت ترافیک، در مخزن خصوصی جداگانه نگهداری می‌شوند.
-- تغییرات، بهبودها و به‌روزرسانی‌های طراحی از طریق این مخزن منتشر خواهند شد.
+### Execution
+Run the compiled binary:
+```bash
+cargo run
+```
 
-## استفاده از قالب
+### Testing
+Run the stability and structural tests:
+```bash
+cargo test -- --nocapture
+```
 
-برای بررسی اجزای طراحی و ساختار صفحات، می‌توانید فایل‌های موجود در این مخزن را مرور نمایید. در صورت داشتن نظرات یا پیشنهادات جهت بهبود قالب، از طریق بخش **Issues** یا ارتباط مستقیم با تیم ما مشارکت فرمایید.
+## 📝 Configuration
+The core can be configured via `SshConfig` struct. It supports:
+- SSH User/Password authentication.
+- Local Port Forwarding (SOCKS5/HTTP Proxy compatible).
+- Split Tunneling IP ranges.
+- Choice between C-based and Native Rust SSH engines.
 
-## ارتباط با ما
-
-[https://github.com/movtigroup/](https://github.com/movtigroup/)
+## ⚖️ License
+Released under the MIT License.

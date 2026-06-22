@@ -1,30 +1,56 @@
-# MOVTIGROUP Website Template
-[English](README.en.md) | [فارسی](README.md)
-This repository contains the main website template for **MOVTIGROUP**. Its purpose is to showcase and document the visual design and layout of the website, representing the company’s visual identity. Note that the operational code and backend logic are stored privately in a separate repository.
+# SSH-VPN Rust-Based High-Performance Core
 
-**GitHub Repository:** [https://github.com/movtigroup/movtigroup/](https://github.com/movtigroup/movtigroup/)
+An ultra-safe, blazingly fast network core rewritten in **Rust** to support asynchronous **SSH Tunneling**, **VPN encapsulation**, and **Split Tunneling** automation. This core is designed to be the foundation for modern VPN applications, providing 100% stability and zero-cost abstractions.
 
-## Introduction
+## 🚀 Architectural Advantages
+- **Hybrid SSH Backend**: Supports both `libssh2` (via C bindings) and `russh` (native Rust) for maximum compatibility and safety.
+- **Zero Garbage Collection**: Zero runtime pauses ensure consistent ping and throughput.
+- **Memory Safety Guarantee**: Compile-time memory verification prevents Buffer Overflows and Data Races.
+- **Native Async Stack**: Built using Tokio for massive connection scaling.
+- **Split Tunneling**: Built-in support for OS-level routing configuration (Linux, macOS, Windows).
+- **SlipNet Support**: Architecture designed to be compatible with DNS tunneling protocols like those found in [SlipNet](https://github.com/anonvector/SlipNet).
 
-This template serves as the primary visual design for the MOVTIGROUP website. The focus is on delivering a modern, clean, and responsive user experience that reflects the brand identity through its visual components.
+## 🛠️ Project Structure
+- `src/main.rs`: Entry point and service orchestration.
+- `src/ssh/`: SSH engines (LibSSH2 and Russh backends).
+- `src/routing.rs`: OS-specific routing table management.
+- `tests/`: Comprehensive integration and stability tests.
 
-## Template Features
+## 📦 Compilation and Setup
 
-- **Responsive Design:** Optimized for various devices including mobile, tablet, and desktop.
-- **Easy Customization:** Design elements can be easily adjusted to align with the company’s visual identity.
-- **User-Friendly Documentation:** A clean and well-documented structure for quick navigation and understanding.
-- **Maintainability:** Regular updates and an organized file structure ensure consistent design evolution.
+### Prerequisites
+- Install Rust toolchain: `curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh`
 
-## Important Notes
+### Setup
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/tahatehran/SSH-VPN.git
+   cd SSH-VPN
+   ```
 
-- This repository is solely for presenting the visual design and layout components of the website.
-- Code related to operational functionality and traffic management is maintained privately in a separate repository.
-- Updates, improvements, and design revisions are published here.
+2. Build the project in release mode:
+   ```bash
+   cargo build --release
+   ```
 
-## Usage
+### Execution
+Run the compiled binary:
+```bash
+cargo run
+```
 
-Feel free to review the files in this repository to explore the visual design and layout of the website. For any suggestions or feedback to improve the template, please use the **Issues** section on GitHub or contact our team directly.
+### Testing
+Run the stability and structural tests:
+```bash
+cargo test -- --nocapture
+```
 
-## Contact
+## 📝 Configuration
+The core can be configured via `SshConfig` struct. It supports:
+- SSH User/Password authentication.
+- Local Port Forwarding (SOCKS5/HTTP Proxy compatible).
+- Split Tunneling IP ranges.
+- Choice between C-based and Native Rust SSH engines.
 
-- **GitHub:** [https://github.com/movtigroup/](https://github.com/movtigroup/)
+## ⚖️ License
+Released under the MIT License.
