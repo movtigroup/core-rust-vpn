@@ -4,7 +4,7 @@ use anyhow::{Result, anyhow};
 use ssh2::Session;
 use std::sync::Arc;
 use std::io::{Read, Write};
-use tracing::{info, error};
+use tracing::{info, error, warn};
 
 pub struct LibSsh2Engine {
     config: SshConfig,
@@ -20,6 +20,7 @@ impl LibSsh2Engine {
 impl SshEngine for LibSsh2Engine {
     async fn start(&self) -> Result<()> {
         info!("Starting LibSSH2 Engine for {}", self.config.server_addr);
+        warn!("LibSSH2 backend is synchronous and may have performance limits under high concurrency.");
 
         let config = self.config.clone();
 
@@ -103,6 +104,7 @@ impl SshEngine for LibSsh2Engine {
                         }
 
                         if !active {
+                            // Yield to CPU to prevent 100% usage on idle tunnels
                             std::thread::sleep(std::time::Duration::from_millis(1));
                         }
                     }

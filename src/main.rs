@@ -27,6 +27,9 @@ async fn main() -> anyhow::Result<()> {
         remote_target_port: 8080,
     };
 
+    // Validate configuration
+    config.validate()?;
+
     // Example of using the native Rust engine for better stability
     let use_native = std::env::var("USE_NATIVE_SSH").unwrap_or_default() == "1";
 

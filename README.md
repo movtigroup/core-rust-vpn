@@ -1,56 +1,56 @@
-# SSH-VPN Rust-Based High-Performance Core
+# هسته شبکه فوق‌سریع مبتنی بر Rust برای SSH-VPN
 
-An ultra-safe, blazingly fast network core rewritten in **Rust** to support asynchronous **SSH Tunneling**, **VPN encapsulation**, and **Split Tunneling** automation. This core is designed to be the foundation for modern VPN applications, providing 100% stability and zero-cost abstractions.
+یک هسته شبکه بسیار امن و سریع که با زبان **Rust** بازنویسی شده است تا از **SSH Tunneling** غیرهمزمان، **VPN encapsulation** و مدیریت خودکار **Split Tunneling (جدول مسیریابی)** پشتیبانی کند. این هسته به عنوان زیربنای نرم‌افزارهای مدرن VPN طراحی شده و پایداری ۱۰۰٪ و کارایی حداکثری را تضمین می‌کند.
 
-## 🚀 Architectural Advantages
-- **Hybrid SSH Backend**: Supports both `libssh2` (via C bindings) and `russh` (native Rust) for maximum compatibility and safety.
-- **Zero Garbage Collection**: Zero runtime pauses ensure consistent ping and throughput.
-- **Memory Safety Guarantee**: Compile-time memory verification prevents Buffer Overflows and Data Races.
-- **Native Async Stack**: Built using Tokio for massive connection scaling.
-- **Split Tunneling**: Built-in support for OS-level routing configuration (Linux, macOS, Windows).
-- **SlipNet Support**: Architecture designed to be compatible with DNS tunneling protocols like those found in [SlipNet](https://github.com/anonvector/SlipNet).
+## 🚀 مزایای معماری
+- **موتور دوگانه SSH**: پشتیبانی همزمان از `libssh2` (سی) و `russh` (راست بومی) برای حداکثر سازگاری و امنیت.
+- **بدون Garbage Collection**: حذف وقفه‌های زمان اجرا برای تضمین پینگ و پهنای باند ثابت.
+- **امنیت حافظه تضمین شده**: تایید مدیریت حافظه در زمان کامپایل برای جلوگیری از سرریز بافر و تداخل داده‌ها.
+- **پشته غیرهمزمان (Async)**: ساخته شده با Tokio برای مدیریت همزمان هزاران اتصال.
+- **Split Tunneling**: پشتیبانی داخلی از پیکربندی روت‌های سیستم‌عامل (Linux, macOS, Windows).
+- **سازگاری با SlipNet**: معماری طراحی شده برای سازگاری با پروتکل‌های DNS tunneling مشابه [SlipNet](https://github.com/anonvector/SlipNet).
 
-## 🛠️ Project Structure
-- `src/main.rs`: Entry point and service orchestration.
-- `src/ssh/`: SSH engines (LibSSH2 and Russh backends).
-- `src/routing.rs`: OS-specific routing table management.
-- `tests/`: Comprehensive integration and stability tests.
+## 🛠️ ساختار پروژه
+- `src/main.rs`: نقطه ورود و مدیریت سرویس‌ها.
+- `src/ssh/`: موتورهای SSH (بک‌اندهای LibSSH2 و Russh).
+- `src/routing.rs`: مدیریت جداول مسیریابی مخصوص هر سیستم‌عامل.
+- `tests/`: تست‌های جامع یکپارچه‌سازی و پایداری.
 
-## 📦 Compilation and Setup
+## 📦 نصب و راه‌اندازی
 
-### Prerequisites
-- Install Rust toolchain: `curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh`
+### پیش‌نیازها
+- نصب ابزارهای Rust: `curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh`
 
-### Setup
-1. Clone the repository:
+### راه‌اندازی
+1. کپی کردن مخزن:
    ```bash
    git clone https://github.com/tahatehran/SSH-VPN.git
    cd SSH-VPN
    ```
 
-2. Build the project in release mode:
+2. کامپایل پروژه در حالت Release:
    ```bash
    cargo build --release
    ```
 
-### Execution
-Run the compiled binary:
+### اجرا
+اجرای فایل باینری خروجی:
 ```bash
 cargo run
 ```
 
-### Testing
-Run the stability and structural tests:
+### تست
+اجرای تست‌های ساختاری و پایداری:
 ```bash
 cargo test -- --nocapture
 ```
 
-## 📝 Configuration
-The core can be configured via `SshConfig` struct. It supports:
-- SSH User/Password authentication.
-- Local Port Forwarding (SOCKS5/HTTP Proxy compatible).
-- Split Tunneling IP ranges.
-- Choice between C-based and Native Rust SSH engines.
+## 📝 تنظیمات
+تنظیمات هسته از طریق استراکت `SshConfig` قابل انجام است. ویژگی‌های فعلی:
+- احراز هویت SSH با یوزرنیم و پسورد.
+- فوروارد کردن پورت محلی (سازگار با SOCKS5/HTTP Proxy).
+- مدیریت محدوده‌های IP برای Split Tunneling.
+- انتخاب بین موتور SSH مبتنی بر C یا Rust بومی.
 
-## ⚖️ License
-Released under the MIT License.
+## ⚖️ لایسنس
+منتشر شده تحت لایسنس MIT.

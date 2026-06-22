@@ -23,6 +23,8 @@ struct ClientHandler {}
 impl client::Handler for ClientHandler {
     type Error = anyhow::Error;
     async fn check_server_key(self, _server_public_key: &key::PublicKey) -> Result<(Self, bool), Self::Error> {
+        // SECURITY NOTE: In production, you MUST verify the server's public key
+        // to prevent Man-In-The-Middle attacks. For this core, we accept it for ease of use.
         Ok((self, true))
     }
 }

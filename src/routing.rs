@@ -64,3 +64,11 @@ pub fn remove_split_route(target_ip: &str) -> Result<(), String> {
         },
     }
 }
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn test_routing_logic_stub() {
+        // Stub for routing tests
+    }
+}
