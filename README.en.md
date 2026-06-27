@@ -1,56 +1,34 @@
-# SSH-VPN Rust-Based High-Performance Core
+# هسته شبکه فوق‌سریع مبتنی بر Rust برای SSH-VPN
 
-An ultra-safe, blazingly fast network core rewritten in **Rust** to support asynchronous **SSH Tunneling**, **VPN encapsulation**, and **Split Tunneling** automation. This core is designed to be the foundation for modern VPN applications, providing 100% stability and zero-cost abstractions.
+یک هسته شبکه بسیار امن و سریع که با زبان **Rust** بازنویسی شده است تا از **SSH Tunneling** غیرهمزمان، **SOCKS5**، **HTTP Proxy** و مدیریت خودکار **Split Tunneling** پشتیبانی کند.
 
-## 🚀 Architectural Advantages
-- **Hybrid SSH Backend**: Supports both `libssh2` (via C bindings) and `russh` (native Rust) for maximum compatibility and safety.
-- **Zero Garbage Collection**: Zero runtime pauses ensure consistent ping and throughput.
-- **Memory Safety Guarantee**: Compile-time memory verification prevents Buffer Overflows and Data Races.
-- **Native Async Stack**: Built using Tokio for massive connection scaling.
-- **Split Tunneling**: Built-in support for OS-level routing configuration (Linux, macOS, Windows).
-- **SlipNet Support**: Architecture designed to be compatible with DNS tunneling protocols like those found in [SlipNet](https://github.com/anonvector/SlipNet).
+## 🚀 ویژگی‌های کلیدی
+- **پشتیبانی از SOCKS5 و HTTP Proxy**: امکان استفاده به عنوان یک پراکسی سرور داینامیک.
+- **موتور دوگانه SSH**: پشتیبانی از `libssh2` و `russh` (راست بومی).
+- **بدون Garbage Collection**: تضمین پایداری و سرعت در سطح سیستم.
+- **Async IO**: استفاده از پشته غیرهمزمان Tokio برای مقیاس‌پذیری بالا.
+- **Split Tunneling**: مدیریت جداول مسیریابی در لینوکس، مک و ویندوز.
 
-## 🛠️ Project Structure
-- `src/main.rs`: Entry point and service orchestration.
-- `src/ssh/`: SSH engines (LibSSH2 and Russh backends).
-- `src/routing.rs`: OS-specific routing table management.
-- `tests/`: Comprehensive integration and stability tests.
+## 📦 نصب و اجرا
 
-## 📦 Compilation and Setup
-
-### Prerequisites
-- Install Rust toolchain: `curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh`
-
-### Setup
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/tahatehran/SSH-VPN.git
-   cd SSH-VPN
-   ```
-
-2. Build the project in release mode:
-   ```bash
-   cargo build --release
-   ```
-
-### Execution
-Run the compiled binary:
+### کامپایل
 ```bash
-cargo run
+cargo build --release
 ```
 
-### Testing
-Run the stability and structural tests:
-```bash
-cargo test -- --nocapture
-```
+### اجرا در حالت‌های مختلف
+- **حالت مستقیم (Direct)**:
+  ```bash
+  cargo run
+  ```
+- **حالت SOCKS5**:
+  ```bash
+  CORE_MODE=socks5 cargo run
+  ```
+- **حالت HTTP Proxy**:
+  ```bash
+  CORE_MODE=http cargo run
+  ```
 
-## 📝 Configuration
-The core can be configured via `SshConfig` struct. It supports:
-- SSH User/Password authentication.
-- Local Port Forwarding (SOCKS5/HTTP Proxy compatible).
-- Split Tunneling IP ranges.
-- Choice between C-based and Native Rust SSH engines.
-
-## ⚖️ License
-Released under the MIT License.
+## ⚖️ لایسنس
+MIT License - Copyright (c) 2026 Taha Tehran

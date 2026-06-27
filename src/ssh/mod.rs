@@ -5,6 +5,13 @@ use serde::{Deserialize, Serialize};
 pub mod libssh2_backend;
 pub mod russh_backend;
 
+#[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq)]
+pub enum ProxyMode {
+    Direct, // Static forwarding to a single target
+    Socks5, // Dynamic forwarding via SOCKS5
+    Http,   // Dynamic forwarding via HTTP CONNECT
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct SshConfig {
     pub username: String,
@@ -12,8 +19,9 @@ pub struct SshConfig {
     pub private_key_path: Option<String>,
     pub server_addr: String,
     pub local_proxy_addr: String,
-    pub remote_target_host: String,
-    pub remote_target_port: u16,
+    pub mode: ProxyMode,
+    pub remote_target_host: String, // Only used in Direct mode
+    pub remote_target_port: u16,    // Only used in Direct mode
 }
 
 impl SshConfig {
@@ -48,6 +56,7 @@ mod tests {
             private_key_path: None,
             server_addr: "127.0.0.1:22".to_string(),
             local_proxy_addr: "127.0.0.1:1080".to_string(),
+            mode: ProxyMode::Direct,
             remote_target_host: "127.0.0.1".to_string(),
             remote_target_port: 80,
         };

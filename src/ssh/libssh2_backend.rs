@@ -1,4 +1,4 @@
-use crate::ssh::{SshConfig, SshEngine};
+use crate::ssh::{SshConfig, SshEngine, ProxyMode};
 use async_trait::async_trait;
 use anyhow::{Result, anyhow};
 use ssh2::Session;
@@ -20,7 +20,9 @@ impl LibSsh2Engine {
 impl SshEngine for LibSsh2Engine {
     async fn start(&self) -> Result<()> {
         info!("Starting LibSSH2 Engine for {}", self.config.server_addr);
-        warn!("LibSSH2 backend is synchronous and may have performance limits under high concurrency.");
+        if self.config.mode != ProxyMode::Direct {
+            warn!("LibSSH2 backend currently only supports Direct mode reliably. Socks5/Http might be unstable.");
+        }
 
         let config = self.config.clone();
 
@@ -33,8 +35,6 @@ impl SshEngine for LibSsh2Engine {
             if let Some(pwd) = &config.password {
                 sess.userauth_password(&config.username, pwd)
                     .map_err(|e| anyhow!("Auth failed: {}", e))?;
-            } else {
-                return Err(anyhow!("Password required for this backend currently"));
             }
 
             if !sess.authenticated() {
@@ -57,10 +57,19 @@ impl SshEngine for LibSsh2Engine {
                 };
 
                 let sess_clone = Arc::clone(&sess);
-                let target_host = config.remote_target_host.clone();
-                let target_port = config.remote_target_port;
+                let mode = config.mode;
+                let target_host_config = config.remote_target_host.clone();
+                let target_port_config = config.remote_target_port;
 
                 std::thread::spawn(move || {
+                    let (target_host, target_port) = match mode {
+                        ProxyMode::Direct => (target_host_config, target_port_config),
+                        _ => {
+                            error!("Dynamic proxy modes are not yet fully implemented for LibSSH2 backend");
+                            return;
+                        }
+                    };
+
                     let mut channel = match sess_clone.channel_direct_tcpip(&target_host, target_port, None) {
                         Ok(ch) => ch,
                         Err(e) => {
@@ -80,33 +89,19 @@ impl SshEngine for LibSsh2Engine {
 
                     loop {
                         let mut active = false;
-
-                        // Local -> Remote
                         match local_stream_r.read(&mut buf_l) {
                             Ok(0) => break,
-                            Ok(n) => {
-                                let _ = channel.write_all(&buf_l[..n]);
-                                active = true;
-                            }
+                            Ok(n) => { let _ = channel.write_all(&buf_l[..n]); active = true; }
                             Err(ref e) if e.kind() == std::io::ErrorKind::WouldBlock => {}
                             Err(_) => break,
                         }
-
-                        // Remote -> Local
                         match channel.read(&mut buf_r) {
                             Ok(0) => break,
-                            Ok(n) => {
-                                let _ = local_stream_w.write_all(&buf_r[..n]);
-                                active = true;
-                            }
+                            Ok(n) => { let _ = local_stream_w.write_all(&buf_r[..n]); active = true; }
                             Err(ref e) if e.kind() == std::io::ErrorKind::WouldBlock => {}
                             Err(_) => break,
                         }
-
-                        if !active {
-                            // Yield to CPU to prevent 100% usage on idle tunnels
-                            std::thread::sleep(std::time::Duration::from_millis(1));
-                        }
+                        if !active { std::thread::sleep(std::time::Duration::from_millis(1)); }
                     }
                 });
             }
